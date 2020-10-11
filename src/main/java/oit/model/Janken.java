@@ -2,6 +2,7 @@ package oit.is.z1438.kaizi.janken.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Janken {
   private int user_hand;
@@ -18,7 +19,7 @@ public class Janken {
   // コンストラクタ
   public Janken(int user_hand) {
     this.user_hand = user_hand;
-    this.cpu_hand = 0;
+    this.cpu_hand = new Random().nextInt(3);
   }
 
   public String getUserHand() {
