@@ -11,9 +11,15 @@
 
   <h1>Lec02 GET!</h1>
 
-  <p>
-  <div th:if="${user_name}">
-    Hi [[${user_name}]]
+  <div th:if="${entry}">
+    エントリー
+    <ul>
+      <li th:each="user : ${entry.users}">[[${user}]]</li>
+    </ul>
+  </div>
+
+  <div th:if="${login_user}">
+    Hi [[${login_user}]]
   </div>
 
   <a href="/lec02/game?user_hand=0">ぐー</a>
@@ -31,7 +37,6 @@
   <div th:if="${result}">
     結果 [[${result}]]
   </div>
-  </p>
 
 </body>
 
