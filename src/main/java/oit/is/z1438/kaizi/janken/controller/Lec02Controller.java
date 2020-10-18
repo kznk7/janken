@@ -13,18 +13,24 @@ import oit.is.z1438.kaizi.janken.model.Janken;
 @RequestMapping("/lec02")
 public class Lec02Controller {
 
+  @GetMapping
+  public String lec02() {
+    return "lec02.html";
+  }
+
   @PostMapping
   public String lec02(@RequestParam String user_name, ModelMap model) {
     model.addAttribute("user_name", user_name);
     return "lec02.html";
   }
 
-  @GetMapping
-  public String lec02(@RequestParam Integer user_hand, ModelMap model) {
+  @GetMapping("game")
+  public String game(@RequestParam Integer user_hand, ModelMap model) {
     Janken janken = new Janken(user_hand);
     model.addAttribute("user_hand", janken.getUserHand());
     model.addAttribute("cpu_hand", janken.getCpuHand());
     model.addAttribute("result", janken.result());
     return "lec02.html";
   }
+
 }
