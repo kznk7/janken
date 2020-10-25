@@ -23,6 +23,19 @@
     今[[${users.size()}]]人がエントリーしています
   </div>
 
+  <div th:if="${matches}">
+    <h2>試合結果</h2>
+    <ul style="list-style: none; padding-left: 0;">
+      <li th:each="match,stat:${matches}">
+        id:[[${match.id}]]
+        user_1:[[${match.user_1}]]
+        user_2:[[${match.user_2}]]
+        user_1の手:[[${match.user_1_hand}]]
+        user_2の手:[[${match.user_2_hand}]]
+      </li>
+    </ul>
+  </div>
+
   <a href="/lec02/game?user_hand=0">ぐー</a>
   <a href="/lec02/game?user_hand=1">ちょき</a>
   <a href="/lec02/game?user_hand=2">ぱー</a>
