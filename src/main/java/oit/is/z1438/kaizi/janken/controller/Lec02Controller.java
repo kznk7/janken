@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import oit.is.z1438.kaizi.janken.model.Janken;
 import oit.is.z1438.kaizi.janken.model.Entry;
-import oit.is.z1438.kaizi.janken.model.User;
 import oit.is.z1438.kaizi.janken.model.UserMapper;
-import oit.is.z1438.kaizi.janken.model.Match;
 import oit.is.z1438.kaizi.janken.model.MatchMapper;
 
 @Controller
-@RequestMapping("/lec02")
 public class Lec02Controller {
 
   @Autowired
@@ -31,27 +28,26 @@ public class Lec02Controller {
   @Autowired
   private MatchMapper matchMapper;
 
-  @GetMapping
+  @GetMapping("/lec02")
   public String lec02(Principal prin, ModelMap model) {
     String loginUser = prin.getName();
     this.entry.addUser(loginUser);
     model.addAttribute("login_user", loginUser);
     model.addAttribute("entry", this.entry);
-    ArrayList<User> users = userMapper.selectAllUsers();
-    model.addAttribute("users", users);
-    ArrayList<Match> matches = matchMapper.selectAllMatches();
-    model.addAttribute("matches", matches);
+    model.addAttribute("users", userMapper.selectAllUsers());
+    model.addAttribute("matches", matchMapper.selectAllMatches());
     return "lec02.html";
   }
 
-  @PostMapping
-  public String lec02(@RequestParam String user_name, ModelMap model) {
-    model.addAttribute("user_name", user_name);
-    return "lec02.html";
+  @GetMapping("/match")
+  public String match(@RequestParam Integer id, Principal prin, ModelMap model) {
+    model.addAttribute("user_name", prin.getName());
+    model.addAttribute("cpu_name", userMapper.selectAllUsers().get(id - 1).getName());
+    return "match.html";
   }
 
-  @GetMapping("game")
-  public String game(@RequestParam Integer user_hand, ModelMap model) {
+  @GetMapping("/result")
+  public String result(@RequestParam Integer user_hand, ModelMap model) {
     Janken janken = new Janken(user_hand);
     model.addAttribute("user_hand", janken.getUserHand());
     model.addAttribute("cpu_hand", janken.getCpuHand());
