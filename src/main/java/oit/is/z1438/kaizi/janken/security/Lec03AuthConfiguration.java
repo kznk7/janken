@@ -46,6 +46,9 @@ public class Lec03AuthConfiguration extends WebSecurityConfigurerAdapter {
     // authenticated()の代わりにpermitAll()と書くと認証処理が不要であることを示す
     http.authorizeRequests().antMatchers("/lec02/**").authenticated();
 
+    http.csrf().disable();
+    http.headers().frameOptions().disable();
+
     // Spring Securityの機能を利用してログアウト．ログアウト時は http://localhost:8080/ に戻る
     http.logout().logoutSuccessUrl("/");
   }
