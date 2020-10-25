@@ -5,6 +5,7 @@ import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import oit.is.z1438.kaizi.janken.model.Janken;
 import oit.is.z1438.kaizi.janken.model.Entry;
 import oit.is.z1438.kaizi.janken.model.UserMapper;
+import oit.is.z1438.kaizi.janken.model.Match;
 import oit.is.z1438.kaizi.janken.model.MatchMapper;
 
 @Controller
@@ -28,9 +30,15 @@ public class Lec02Controller {
   @Autowired
   private MatchMapper matchMapper;
 
+  private int user_id;
+
   @GetMapping("/lec02")
+  @Transactional
   public String lec02(Principal prin, ModelMap model) {
     String loginUser = prin.getName();
+    //データベースに同名が存在するとエラー
+    user_id = userMapper.selectIdByName(loginUser);
+
     this.entry.addUser(loginUser);
     model.addAttribute("login_user", loginUser);
     model.addAttribute("entry", this.entry);
@@ -40,19 +48,36 @@ public class Lec02Controller {
   }
 
   @GetMapping("/match")
+  @Transactional
   public String match(@RequestParam Integer id, Principal prin, ModelMap model) {
+    model.addAttribute("cpu_id", id);
     model.addAttribute("user_name", prin.getName());
     model.addAttribute("cpu_name", userMapper.selectAllUsers().get(id - 1).getName());
     return "match.html";
   }
 
   @GetMapping("/result")
-  public String result(@RequestParam Integer user_hand, ModelMap model) {
+  @Transactional
+  public String result(@RequestParam Integer cpu_id, @RequestParam Integer user_hand, Principal prin, ModelMap model) {
     Janken janken = new Janken(user_hand);
-    model.addAttribute("user_hand", janken.getUserHand());
-    model.addAttribute("cpu_hand", janken.getCpuHand());
+    Match match = new Match();
+    String userHand = janken.getUserHand();
+    String cpuHand = janken.getCpuHand();
+
+    match.setUser_1(user_id);
+    match.setUser_2(cpu_id);
+    match.setUser_1_hand(userHand);
+    match.setUser_2_hand(cpuHand);
+    // データベースに試合結果を保存
+    matchMapper.insertMatch(match);
+
+    model.addAttribute("cpu_id", cpu_id);
+    model.addAttribute("user_name", prin.getName());
+    model.addAttribute("cpu_name", userMapper.selectNameById(cpu_id));
+    model.addAttribute("user_hand", userHand);
+    model.addAttribute("cpu_hand", cpuHand);
     model.addAttribute("result", janken.result());
-    return "lec02.html";
+    return "match.html";
   }
 
 }

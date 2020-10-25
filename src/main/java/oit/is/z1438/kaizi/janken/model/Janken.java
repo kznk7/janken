@@ -10,9 +10,9 @@ public class Janken {
 
   Map<Integer, String> hand = new HashMap<Integer, String>() {
     {
-      put(0, "ぐー");
-      put(1, "ちょき");
-      put(2, "ぱー");
+      put(0, "Gu");
+      put(1, "Choki");
+      put(2, "Pa");
     }
   };
 

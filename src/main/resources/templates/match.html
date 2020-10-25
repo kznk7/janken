@@ -8,9 +8,33 @@
 
 <body>
 
+  <a href="/logout">ログアウト</a>
+
+  <h1>Match</h1>
+
   <div th:if="${user_name} and ${cpu_name}">
     <h2>[[${user_name}]] V.S. [[${cpu_name}]]</h2>
   </div>
+
+  <div th:if="${cpu_id}">
+    <a th:href="@{/result(cpu_id=${cpu_id},user_hand=0)}">ぐー</a>
+    <a th:href="@{/result(cpu_id=${cpu_id},user_hand=1)}">ちょき</a>
+    <a th:href="@{/result(cpu_id=${cpu_id},user_hand=2)}">ぱー</a>
+  </div>
+
+  <div th:if="${user_hand}">
+    あなたの手 [[${user_hand}]]
+  </div>
+
+  <div th:if="${cpu_hand}">
+    相手の手 [[${cpu_hand}]]
+  </div>
+
+  <div th:if="${result}">
+    結果 [[${result}]]
+  </div>
+
+  <a href="/lec02">もどる</a>
 
 </body>
 
