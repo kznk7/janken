@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
 
 <head>
   <meta charset="utf-8">
@@ -17,9 +17,9 @@
   </div>
 
   <div th:if="${cpu_id}">
-    <a th:href="@{/result(cpu_id=${cpu_id},user_hand=0)}">ぐー</a>
-    <a th:href="@{/result(cpu_id=${cpu_id},user_hand=1)}">ちょき</a>
-    <a th:href="@{/result(cpu_id=${cpu_id},user_hand=2)}">ぱー</a>
+    <a th:href="@{/wait(cpu_id=${cpu_id},user_hand=0)}">ぐー</a>
+    <a th:href="@{/wait(cpu_id=${cpu_id},user_hand=1)}">ちょき</a>
+    <a th:href="@{/wait(cpu_id=${cpu_id},user_hand=2)}">ぱー</a>
   </div>
 
   <div th:if="${user_hand}">

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
+
+<head>
+  <meta charset="utf-8">
+  <title>Wait</title>
+  <script>
+    window.onload = function () {
+      var sse = new EventSource('/async');
+      sse.onmessage = function (event) {
+        console.log(event.data);
+        document.getElementById("result").innerHTML = "<h3>結果を見る</h3>";
+      }
+    }
+  </script>
+</head>
+
+<body>
+
+  <h1>相手の手を待っています</h1>
+
+  <div th:if="${login_user}">
+    Hi [[${login_user}]]
+  </div>
+
+  <a href="/lec02" id="result"></a>
+
+</body>
+
+</html>
