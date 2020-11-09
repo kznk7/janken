@@ -26,6 +26,8 @@ public class Lec03AuthConfiguration extends WebSecurityConfigurerAdapter {
         .password("$2y$10$HJY2rtI1RFZZ/7P3wXinJOez.ncGDRiTAYmvMXlM4B17nndYjbgyO").roles("USER");
     auth.inMemoryAuthentication().withUser("ながたに")
         .password("$2y$10$nh3Jvl2XII41owgDfKhtCuYt02ei/oJ0aMGMho8TQgBPA2YrQiV3y").roles("USER");
+    auth.inMemoryAuthentication().withUser("たろう")
+        .password("$2y$10$QMGg2DiReM9ykevdFyCeTOlBJ8mnJykXSCeXBZ/V43s4Tpc7srKu6").roles("USER");
   }
 
   @Bean
