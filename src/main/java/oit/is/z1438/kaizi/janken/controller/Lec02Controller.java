@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import oit.is.z1438.kaizi.janken.model.Janken;
 import oit.is.z1438.kaizi.janken.model.Entry;
@@ -19,6 +20,8 @@ import oit.is.z1438.kaizi.janken.model.Match;
 import oit.is.z1438.kaizi.janken.model.MatchMapper;
 import oit.is.z1438.kaizi.janken.model.MatchInfo;
 import oit.is.z1438.kaizi.janken.model.MatchInfoMapper;
+
+import oit.is.z1438.kaizi.janken.service.AsyncKekka;
 
 @Controller
 public class Lec02Controller {
@@ -34,6 +37,9 @@ public class Lec02Controller {
 
   @Autowired
   private MatchInfoMapper matchInfoMapper;
+
+  @Autowired
+  AsyncKekka asyncKekka;
 
   private int user_id;
 
@@ -65,6 +71,32 @@ public class Lec02Controller {
     model.addAttribute("user_name", prin.getName());
     model.addAttribute("cpu_name", userMapper.selectAllUsers().get(id - 1).getName());
     return "match.html";
+  }
+
+  @GetMapping("/async")
+  public SseEmitter async() {
+    final SseEmitter sseEmitter = new SseEmitter();
+    this.asyncKekka.asyncCheckActiveMatch(sseEmitter);
+    return sseEmitter;
+  }
+
+  @GetMapping("/wait")
+  @Transactional
+  public String wait(@RequestParam Integer cpu_id, @RequestParam Integer user_hand, Principal prin, ModelMap model) {
+    Janken janken = new Janken(user_hand);
+    Match match = new Match();
+    String userHand = janken.getUserHand();
+    String cpuHand = janken.getCpuHand();
+
+    match.setUser_1(user_id);
+    match.setUser_2(cpu_id);
+    match.setUser_1_hand(userHand);
+    match.setUser_2_hand(cpuHand);
+    // データベースに試合結果を保存
+    matchMapper.insertMatch(match);
+
+    model.addAttribute("login_user", prin.getName());
+    return "wait.html";
   }
 
   @GetMapping("/result")
