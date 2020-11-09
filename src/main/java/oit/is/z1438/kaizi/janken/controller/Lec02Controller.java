@@ -17,6 +17,8 @@ import oit.is.z1438.kaizi.janken.model.Entry;
 import oit.is.z1438.kaizi.janken.model.UserMapper;
 import oit.is.z1438.kaizi.janken.model.Match;
 import oit.is.z1438.kaizi.janken.model.MatchMapper;
+import oit.is.z1438.kaizi.janken.model.MatchInfo;
+import oit.is.z1438.kaizi.janken.model.MatchInfoMapper;
 
 @Controller
 public class Lec02Controller {
@@ -29,6 +31,9 @@ public class Lec02Controller {
 
   @Autowired
   private MatchMapper matchMapper;
+
+  @Autowired
+  private MatchInfoMapper matchInfoMapper;
 
   private int user_id;
 
@@ -50,6 +55,12 @@ public class Lec02Controller {
   @GetMapping("/match")
   @Transactional
   public String match(@RequestParam Integer id, Principal prin, ModelMap model) {
+    MatchInfo matchInfo = new MatchInfo();
+    matchInfo.setUser_1(user_id);
+    matchInfo.setUser_2(id);
+    matchInfo.setActive(true);
+    matchInfoMapper.insertMatchInfo(matchInfo);
+
     model.addAttribute("cpu_id", id);
     model.addAttribute("user_name", prin.getName());
     model.addAttribute("cpu_name", userMapper.selectAllUsers().get(id - 1).getName());
